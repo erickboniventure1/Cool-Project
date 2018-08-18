@@ -12,16 +12,16 @@ class Facility extends Model
     	'region_id', 
     	'name', 
     	'description',
-    	 'status',
+    	'status',
     ];
-    public function districts(){
+    public function district(){
     	return $this->belongsTo('App\District');
 
     }
-    public function regions(){
+    public function region(){
     	return $this->belongsTo('App\Region');
     }
-    public function ipc_leaders(){
+    public function ipc_leader(){
     	return $this->belongsTo('App\IpcLeader');
     }
    

@@ -15,4 +15,8 @@ class IpcLeader extends Model
           'status', 
           'description',
     ];
+
+    public function facilities(){
+      return $this->hasMany('App\Facility');
+    }
 }

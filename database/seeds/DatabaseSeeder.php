@@ -12,5 +12,70 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        App\User::create([
+        	'name' => 'Admin',
+        	'email' => 'admin@psi.com',
+        	'password' => bcrypt('secret'),
+        ]);
+
+        $faker = Faker\Factory::create();
+
+        $regions = [
+        	'Arusha', 'Mwanza', 'Dar es Salaam', 'Dodoma',
+        	'Morogoro',
+        ];
+
+        for($i = 0; $i < 5; $i++) {
+        	$ipcLeader = App\IpcLeader::create([
+		        'first_name' => $faker->firstName(),
+		        'last_name' => $faker->lastName(),
+		        'phone_number' => $faker->phoneNumber(),
+		        'device_sn' => $faker->randomNumber(),
+		        'device_imei' => $faker->randomNumber(),
+		        'status' => true,
+		        'description' => $faker->paragraph(3, true),
+           ]);
+
+
+
+        	$region = App\Region::create([
+		        'name' => $regions[$i],
+            ]);
+
+        	for($d = 0; $d < 3; $d++) {
+        		$district = App\District::create([
+	            	'region_id' => $region->id,
+			        'name' => $faker->city(),
+	            ]);
+
+	            for ($f=0; $f < 6; $f++) { 
+	            	$facility = App\Facility::create([
+	        			'ipc_leader_id' => $ipcLeader->id,
+				    	'district_id' => $district->id,
+				    	'region_id' => $region->id,
+				    	'name' => $faker->company(),
+				    	'description' => $faker->paragraph(3, true),
+				    	'status' => true,
+        			]);
+
+        			$facility->staff()->create([
+        				'first_name' => $faker->firstName(),
+				        'last_name' => $faker->lastName(),
+				        'phone_number' => $faker->phoneNumber(),
+				        'device_sn' => $faker->randomNumber(),
+				        'device_imei' => $faker->randomNumber(),
+				        'type' => ($f%2 == 0) ? 'ipc' : 'provider',
+				        'status' => true,
+				        'description' => $faker->paragraph(3, true),
+        			]);
+	            }
+        	}
+
+
+
+
+
+            
+        }
     }
 }

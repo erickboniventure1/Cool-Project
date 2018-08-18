@@ -21,6 +21,7 @@ class CreateStaffTable extends Migration
             $table->string('phone_number');
             $table->string('device_sn')->nullable();
             $table->string('device_imei')->nullable();
+            $table->string('type');
             $table->boolean('status')->default(true);
             $table->text('description')->nullable();
             $table->timestamps();

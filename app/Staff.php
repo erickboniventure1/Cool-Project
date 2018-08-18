@@ -14,12 +14,12 @@ class Staff extends Model
         'device_imei', 
         'status',
         'description',
-        'type'
+        'type',
        'facility_id',
     ];
 
-    public function facilities(){
-      return $this->hasMany('App\Facility');
+    public function facility(){
+      return $this->belongsTo('App\Facility');
     }
 
 }

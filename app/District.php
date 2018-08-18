@@ -11,10 +11,10 @@ class District extends Model
     	 'name',
     ];
 
-
-    public function regions(){
+    public function region(){
     	return $this->belongsTo('App\Region');
     }
+
     public function facilities(){
     	return $this->hasMany('App\Facility');
     }
@@ -22,4 +22,3 @@ class District extends Model
 }
 
 
-https://codecanyon.net/item/hospital-hospital-management-system-with-website/18955750
