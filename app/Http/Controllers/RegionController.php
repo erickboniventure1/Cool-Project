@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Region;
+use App\Program;
+use Illuminate\Http\Request;
 
 class RegionController extends Controller
 {
@@ -13,18 +14,46 @@ class RegionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('regions.index');
+    {   
+        
+        return view('cms.regions', [
+          'regions' => $this->regions(),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Return the regions as json.
      *
+     * @return \Illuminate\Database\Eloquent\Collection  $regions
+     */
+    public function regions()
+    {
+      return Region::all();
+    }
+    
+    /**
+     * Display the form to add resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('regions.create');
+    public function create() {
+      return view('cms.forms.region-form', [
+        'breadcrumb_active' => 'Create New Region',
+        'breadcrumb_past' => 'Regions',
+        'breadcrumb_past_url' => route('regions.index'), 
+      ]);
+    }
+    
+    public function edit(Region $region) {
+      // $region = $this->attachPicture($region);
+      
+      return view('cms.forms.region-form', [
+        'breadcrumb_active' => 'Update Region',
+        'breadcrumb_past' => 'Regions',
+        'breadcrumb_past_url' => route('regions.index'), 
+        'region' => $region,
+      ]);
     }
 
     /**
@@ -35,62 +64,59 @@ class RegionController extends Controller
      */
     public function store(Request $request)
     {
-        //Validate data. Check if they meet our Criteria
-        $this->validate($request,array(
-            'name'=>'required|max:100'
-        ));
-        //Store data into Database
-        $region=new Region;
-        //Assign region variable the Value come from the Request
-        $region->name=$request->name;
-        $region->save();
-
-        //Redirect to anothe Page( The specific region)
-        return redirect()->route('regions.view',$region->id);
+      $this->validate($request, $this->rules(), $this->messages());
+      $region = Region::create($request->all());
+      return redirect()->route('regions.create')
+                       ->with('message', 'Region created successfully');
     }
 
     /**
-     * Display the specified resource.
+     * Get the validation rules
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function show($id)
-    {
-        //
+    private function rules(string $id = null) {
+      return [
+        'name' => 'required',
+      ];
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Get the validation messages
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function edit($id)
-    {
-        //
+    private function messages() {
+      return [
+        'name.unique' => 'A region with same name exists',
+      ];
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Region  $region
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request, $this->rules($id), $this->messages());
+      $region = Region::updateOrCreate(compact('id'), $request->all());
+      return $region;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \App\Region  $region
+     * @return boolean
      */
-    public function destroy($id)
+    public function destroy(Region $region)
     {
-        //
+      $id = $region->id;
+      $region->delete();
+      
+      return $id;
     }
 }

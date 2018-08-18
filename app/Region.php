@@ -10,8 +10,12 @@ class Region extends Model
     	'name',
     ];
     
+    public function facilities(){
+    	return $this->hasMany('App\Facility');
+    }
+    
     public function districts(){
-    	return $this->hasMany('App\Distirct');
+    	return $this->hasMany('App\District');
     }
 
 }

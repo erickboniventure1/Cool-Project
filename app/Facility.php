@@ -18,11 +18,17 @@ class Facility extends Model
     	return $this->belongsTo('App\District');
 
     }
+    
     public function region(){
     	return $this->belongsTo('App\Region');
     }
-    public function ipc_leader(){
+    
+    public function ipcLeader(){
     	return $this->belongsTo('App\IpcLeader');
     }
-   
+    
+    public function staff(){
+    	return $this->hasMany('App\Staff');
+    }
+    
 }
